@@ -1,0 +1,6 @@
+streamlit
+pandas
+matplotlib
+numpy
+japanize-matplotlib
+plotly
