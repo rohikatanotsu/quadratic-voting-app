@@ -208,8 +208,10 @@ class VoteVisualizer:
                 x=0.5
             ),
             xaxis=dict(
-                title='総得票数',
-                titlefont=dict(size=14),
+                title=dict(
+                    text='総得票数',
+                    font=dict(size=14)
+                ),
                 showgrid=True,
                 gridwidth=1,
                 gridcolor='lightgray'
