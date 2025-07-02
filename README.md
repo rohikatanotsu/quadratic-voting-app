@@ -1,4 +1,3 @@
-```markdown
 # Quadratic Voting App
 
 これは、Quadratic Votingの原則に基づいた投票アプリケーションです。
@@ -57,5 +56,4 @@
   ],
   "credits": 100
 }
-```
 ```
