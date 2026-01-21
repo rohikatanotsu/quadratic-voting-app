@@ -49,13 +49,7 @@ class VotingApp:
             v ** 2 for k, v in st.session_state.user_votes.items() if k != option
         )
         remaining_credits = max(0, self.config["credits"] - other_options_cost)
-        theoretical_max = int(remaining_credits ** 0.5)
-        
-        # 複数選択肢がある場合は1つの項目に全クレジットを使うことを禁止
-        if len(self.config["options"]) > 1:
-            max_per_option = int((self.config["credits"] - 1) ** 0.5)
-            return min(theoretical_max, max_per_option)
-        return theoretical_max
+        return int(remaining_credits ** 0.5)
     
     def can_vote_more(self):
         """追加投票が可能かどうかを判定"""
@@ -65,13 +59,7 @@ class VotingApp:
             current_votes = st.session_state.user_votes[option]
             cost_for_next_vote = (current_votes + 1) ** 2 - current_votes ** 2
             
-            # 単一項目全クレジット制限のチェック
-            would_exceed_single_limit = (
-                len(self.config["options"]) > 1 and 
-                (current_votes + 1) ** 2 >= self.config["credits"]
-            )
-            
-            if remaining_credits >= cost_for_next_vote and not would_exceed_single_limit:
+            if remaining_credits >= cost_for_next_vote:
                 return True
         return False
     
@@ -92,7 +80,7 @@ class VotingApp:
             if votes > 0:
                 cost = votes ** 2
                 chart_data.append({
-                    "項目": f"{option} ({votes}票)",
+                    "項目": option,
                     "クレジット": cost,
                     "タイプ": "使用済み"
                 })
@@ -217,13 +205,6 @@ class VotingApp:
         if total_cost > self.config["credits"]:
             st.error("クレジットの上限を超えています。投票数を見直してください。")
             return False
-        
-        # 単一項目全クレジット制限チェック
-        if len(self.config["options"]) > 1:
-            for vote_num in st.session_state.user_votes.values():
-                if vote_num ** 2 >= self.config["credits"]:
-                    st.error("1つの項目に全クレジットを投じることはできません。")
-                    return False
         
         return True
     
